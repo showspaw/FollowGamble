@@ -4,25 +4,21 @@ import com.google.common.base.Joiner;
 import com.heros.follow.web.po.User;
 import com.heros.follow.web.repository.UserRepository;
 import com.heros.follow.web.requests.UserRequest;
-import com.heros.follow.web.utils.Crytography;
+import com.heros.follow.utils.Cryptography;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by root on 2017/1/4.
  */
 @RestController
-public class TestController {
+public class UserController {
     @Autowired
     private UserRepository userRepository;
     @RequestMapping(path="/alert",method = RequestMethod.GET)
@@ -43,10 +39,10 @@ public class TestController {
             User user;
             if(userRepository.existsAccount(ur.getAccount())){
                 user=userRepository.findByAccount(ur.getAccount());
-                String password=Crytography.encodeSHA1(Joiner.on(";").join(ur.getAccount(),ur.getPassword(),user.getCreateDateTime()));
+                String password= Cryptography.encodeSHA1(Joiner.on(";").join(ur.getAccount(),ur.getPassword(),user.getCreateDateTime()));
                 user.update(password, ur.getName(), ur.getMail(), date, ur.getLoginIp());
             }else {
-                String password= Crytography.encodeSHA1(Joiner.on(";").join(ur.getAccount(),ur.getPassword(),date));
+                String password= Cryptography.encodeSHA1(Joiner.on(";").join(ur.getAccount(),ur.getPassword(),date));
                 user = new User(ur.getAccount(),password,ur.getName(),ur.getMail(),date,null,ur.getLoginIp());
                 userRepository.save(user);
             }

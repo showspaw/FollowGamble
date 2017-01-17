@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <Configuration status="warn">
+        <Properties>
+            <property name="log_pattern">%d{yyyy-MM-dd HH:mm:ss z} %-5level %class{36}%L%M - %msg%xEx%n</property>
+            <property name="log-path">logs</property>
+            <!-- ${web:rootDir}是项目根目录 -->
+            <property name="every_file_size">5M</property>
+            <!-- 日志切割的最小单位 -->
+            <property name="output_log_level">ALL</property>
+            <!-- 日志输出级别 -->
+        </Properties>
+		
+        <Appenders>
+
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n" />
+            </Console>
+			<!--
+            <File name="File" fileName="logs/All.log">
+                <PatternLayout pattern="[%-5p] %d %c - %m%n" />
+            </File>
+			-->
+            <RollingFile name="Record" fileName="logs/Server/Server-${date:yyyy-MM-dd}.log" filePattern="logs/Server/Server-%d{yyyy-MM-dd}~%i.log">
+                <PatternLayout pattern="[%-5p] %d %c - %m%n" />
+                <Policies>
+                    <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                    <SizeBasedTriggeringPolicy size="50 MB" />
+                </Policies>
+                <DefaultRolloverStrategy max="30" />
+            </RollingFile>
+
+
+            <RollingFile name="System" fileName="logs/System/System-${date:yyyy-MM-dd}.log" filePattern="logs/System/System-%d{yyyy-MM-dd}~%i.log">
+                <PatternLayout pattern="[%-5p] %d %c - %m%n" />
+                <Policies>
+                    <TimeBasedTriggeringPolicy />
+                    <SizeBasedTriggeringPolicy size="50 MB" />
+                </Policies>
+                <DefaultRolloverStrategy max="30" />
+            </RollingFile>
+			
+        </Appenders>
+		
+        <Loggers>
+		    <Root level="ALL">
+                <AppenderRef ref="Console" />
+            </Root>
+            <Logger name="MsgRecorder" level="ALL" additivity="false">
+                <AppenderRef ref="Record" />
+            </Logger>
+            <Logger name="SystemRecorder" level="ALL" additivity="false">
+                <AppenderRef ref="System" />
+            </Logger>
+
+        </Loggers>
+    </Configuration>

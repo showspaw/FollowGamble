@@ -1,23 +1,41 @@
-package com.heros.follow.web.requests;
+package com.heros.follow.web.po;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.gson.annotations.SerializedName;
-
-import javax.lang.model.element.Name;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
- * Created by root on 2017/1/5.
+ * Created by Albert on 2017/1/10.
  */
-public class UserRequest {
+@Entity
+@Table(name="user_history")
+public class UserHistory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    @Column(name="update_datetime")
+    private Date updateDateTime;
     private String account;
     private String password;
     private String name;
     private String mail;
+    @Column(name="login_ip")
     private String loginIp;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Date getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    public void setUpdateDateTime(Date updateDateTime) {
+        this.updateDateTime = updateDateTime;
+    }
 
     public String getAccount() {
         return account;
