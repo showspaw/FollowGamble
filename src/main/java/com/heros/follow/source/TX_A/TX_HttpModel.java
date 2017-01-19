@@ -45,7 +45,7 @@ public class TX_HttpModel {
         }
         Document docHTML = Jsoup.parse(result);
         //登入頁面指定的html標籤元素
-        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        List<NameValuePair> nvps = new ArrayList<>();
         nvps.add(new BasicNameValuePair("__LASTFOCUS", docHTML.select("input[name=__LASTFOCUS]").attr("value")));	//最後焦點
         nvps.add(new BasicNameValuePair("__EVENTTARGET", docHTML.select("input[name=__EVENTTARGET]").attr("value")));	//事件目標
         nvps.add(new BasicNameValuePair("__EVENTARGUMENT", docHTML.select("input[name=__EVENTARGUMENT]").attr("value")));

@@ -1,33 +1,12 @@
 package com.heros.follow.source.TX_A;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.heros.follow.source.BASE.Engine;
-import com.heros.follow.source.BASE.WebSite;
-import com.heros.follow.source.result.GameResult;
 import com.heros.follow.tools.HttpClientUtils;
 import com.heros.follow.utils.GenericEnum;
-import com.heros.follow.utils.GenericMethod;
 import com.heros.follow.utils.HandleJSONData;
 import com.heros.follow.utils.log4j2;
-import org.apache.http.Header;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import javax.swing.*;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static java.text.DateFormat.MEDIUM;
-import static java.text.DateFormat.SHORT;
-import static java.text.DateFormat.getDateTimeInstance;
 
 /**
  * Created by Albert on 2017/1/12.
@@ -113,7 +92,7 @@ public class TX_Engine extends Engine {
                             if (OpenData_Event_List.contains(curID))
                                 OpenData_Event_List.remove(curID);
                             // 開盤 - 非反灰 且未曾經開盤過 , 不知道之後會不會有新的isdbs代碼, 故直接先以1.2為開盤代號
-                        } else if ((iSdbs.get(curID).equals("1") || iSdbs.get(curID).equals("2")) && ! OpenData_Event_List.contains(curID) && ! DataCenter.getInstence().getIdBanList().contains(curID)) {
+                        } else if ((iSdbs.get(curID).equals("1") || iSdbs.get(curID).equals("2")) && ! OpenData_Event_List.contains(curID) ) {//&& ! DataCenter.getInstence().getIdBanList().contains(curID)
                             // 已開盤名單無此ID, 或是非黑名單ID
                             Mustopen_Event_List.add(curID);
                             OpenData_Event_List.add(curID);
@@ -126,13 +105,13 @@ public class TX_Engine extends Engine {
 
                     if ( ! Mustopen_Event_List.isEmpty()) { // 開盤
                         Date date = new Date();
-                        textArea.append(className + " 共有 " + Mustopen_Event_List.size() + " 筆資料 於 " + getDateTimeInstance(SHORT, MEDIUM).format(date) + " 送出開盤訊號.\r\n");
+//                        textArea.append(className + " 共有 " + Mustopen_Event_List.size() + " 筆資料 於 " + getDateTimeInstance(SHORT, MEDIUM).format(date) + " 送出開盤訊號.\r\n");
 //                        SendApiCenter.getSendApiCenter().sendOpen(SiteCode.TX.getCode(), className, Mustopen_Event_List, SoundPlay.OpenLine);
                     }
 
                     if ( ! Lose_Event_List.isEmpty()) { // 關盤
                         Date date = new Date();
-                        textArea.append(className + " 共有 " + Lose_Event_List.size() + " 筆資料 於 " + getDateTimeInstance(SHORT, MEDIUM).format(date) + " 送出關盤訊號.\r\n");
+//                        textArea.append(className + " 共有 " + Lose_Event_List.size() + " 筆資料 於 " + getDateTimeInstance(SHORT, MEDIUM).format(date) + " 送出關盤訊號.\r\n");
 //                        SendApiCenter.getSendApiCenter().sendClose(SiteCode.TX.getCode(), className, Lose_Event_List, SoundPlay.CloseLine);
                     }
                     FollowID_Old.clear();
@@ -144,7 +123,7 @@ public class TX_Engine extends Engine {
                     Lose_Event_List = null;
                     FollowIDList = null;
                     iSdbs = null;
-                    textArea.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(new Date()) + ":" + EngineName + "跟盤執行中 (request: " + requestTime +"ms, handle: " + handletime + "ms). \r\n");
+//                    textArea.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(new Date()) + ":" + EngineName + "跟盤執行中 (request: " + requestTime +"ms, handle: " + handletime + "ms). \r\n");
 
                     break;
                 }
@@ -171,10 +150,10 @@ public class TX_Engine extends Engine {
         try {
             // 錯誤 設為紅燈
             do {
-                textArea.append("索取資料發生錯誤，將進行第" + (RetryCount + 1) + "次重登動作.\r\n");
+//                textArea.append("索取資料發生錯誤，將進行第" + (RetryCount + 1) + "次重登動作.\r\n");
                 log4j2.getInstance().setLog("MsgRecorder", "索取資料發生錯誤，將進行第" + (RetryCount + 1) + "次重登動作");
-                if (TX) { // 重登成功
-                    textArea.append("進行重登成功，繼續當前作業.\r\n");
+                if (handler.login()) { // 重登成功
+//                    textArea.append("進行重登成功，繼續當前作業.\r\n");
                     RetryCount = 0;
 //                    statusLED.setIcon(new ImageIcon(LabelLED.class.getResource(LabelLED.HIGHGREENLIGHT)));
                     Thread.sleep(2000);
@@ -184,7 +163,7 @@ public class TX_Engine extends Engine {
                         errorStop(true, "嘗試重登失敗超過" + RetryMax + "次, 請檢查九州官方是否正常...");
                         break;
                     } else {
-                        textArea.append("進行重登失敗 " + (8 * RetryCount) + "秒後將再嘗試重登.\r\n");
+//                        textArea.append("進行重登失敗 " + (8 * RetryCount) + "秒後將再嘗試重登.\r\n");
                         Thread.sleep(8000 * RetryCount);
                     }
                 }
@@ -207,12 +186,12 @@ public class TX_Engine extends Engine {
                 itr.next().clossAllLine();
             }
         }
-        // 超過最大可重登次數，進入永久迴圈提示使用者要重開跟盤
-        handler.stopThread();
-        new Thread(()->{
-//            SoundPlay.play(SoundPlay.Disconnection);
-            log4j2.getInstance().setLog("MsgRecorder","嚴重警告:"+ WebSite.NAME.TX+":"+className+"程式已停止運行,使用者要重開跟盤, 原因: " + reason);
-        }).start();
+//        // 超過最大可重登次數，進入永久迴圈提示使用者要重開跟盤
+//        handler.stopThread();
+//        new Thread(()->{
+////            SoundPlay.play(SoundPlay.Disconnection);
+//            log4j2.getInstance().setLog("MsgRecorder","嚴重警告:"+ WebSite.NAME.TX+":"+className+"程式已停止運行,使用者要重開跟盤, 原因: " + reason);
+//        }).start();
 
     }
 

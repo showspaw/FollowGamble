@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentMap;
 public class DataCenter extends Observable {
 
 	private static DataCenter dataCenter;
-	private DataModel model = new DataModel();
-	private SystemConfigBean C_bean;
+//	private DataModel model = new DataModel();
+//	private SystemConfigBean C_bean;
 	
 	private DataCenter() {
 //		for (LineType type : LineType.values()) {
@@ -57,124 +57,124 @@ public class DataCenter extends Observable {
 	public void LoadAll() {
 //		LoadAccount();
 //		LoadWater();	// 改由控端直接更新了
-		LoadItem();
+//		LoadItem();
 //		LoadSiteSetList();
 //		LoadBanList();
 	}
 
-	// 載入帳號資料
-	public boolean LoadAccount() {
-		 int updateNum = 0;
-		synchronized (accountMap) {
-			updateNum = model.HandleAccountData(SendApiCenter.getSendApiCenter().sendAccountApi());
-		}
-		return updateNum > 0;
-	}
-
-	// 載入降水資料
-	public boolean LoadWater() {
-		 int updateNum = 0;
-		synchronized (waterMap) {
-			updateNum = model.HandleWaterData(SendApiCenter.getSendApiCenter().sendWaterApi());
-		}
-		return updateNum > 0;
-	}
-
-	// 載入一般資料
-	public boolean LoadItem() {
-		 int updateNum = 0;
-		synchronized (itemMap) {
-			updateNum = model.HandleItemData(SendApiCenter.getSendApiCenter().sendItemApi());
-		}
-		return updateNum > 0;
-	}
-
-	// 載入黑名單資料
-	public boolean LoadBanList() {
-		 int updateNum = 0;
-		synchronized (IdBanList) {
-			updateNum = model.HandleBanListData(SendApiCenter.getSendApiCenter().sendBanApi());
-		}
-		notifyObservers();
-		return updateNum > 0;
-	}
+//	// 載入帳號資料
+//	public boolean LoadAccount() {
+//		 int updateNum = 0;
+//		synchronized (accountMap) {
+//			updateNum = model.HandleAccountData(SendApiCenter.getSendApiCenter().sendAccountApi());
+//		}
+//		return updateNum > 0;
+//	}
+//
+//	// 載入降水資料
+//	public boolean LoadWater() {
+//		 int updateNum = 0;
+//		synchronized (waterMap) {
+//			updateNum = model.HandleWaterData(SendApiCenter.getSendApiCenter().sendWaterApi());
+//		}
+//		return updateNum > 0;
+//	}
+//
+//	// 載入一般資料
+//	public boolean LoadItem() {
+//		 int updateNum = 0;
+//		synchronized (itemMap) {
+//			updateNum = model.HandleItemData(SendApiCenter.getSendApiCenter().sendItemApi());
+//		}
+//		return updateNum > 0;
+//	}
+//
+//	// 載入黑名單資料
+//	public boolean LoadBanList() {
+//		 int updateNum = 0;
+//		synchronized (IdBanList) {
+//			updateNum = model.HandleBanListData(SendApiCenter.getSendApiCenter().sendBanApi());
+//		}
+//		notifyObservers();
+//		return updateNum > 0;
+//	}
 	
-	// 載入站台設定資料
-	public boolean LoadSiteSetList() {
-		 int updateNum = 0;
-		synchronized (SiteSetMap) {
-			updateNum = model.HandleSiteSetListData(SendApiCenter.getSendApiCenter().sendSiteSetApi());
-		}
-		notifyObservers();
-		return updateNum > 0;
-	}
-	
-	public Map<String, accountData> getAccountMap() {
-		return accountMap;
-	}
-
-	public Map<String, waterData> getWaterMap() {
-		return waterMap;
-	}
-
-	public Map<String, String> getItemMap() {
-		return itemMap;
-	}
-
-	public Set<String> getIdBanList() {
-		return IdBanList;
-	}
-	
-	public Map<Integer, SiteSetData> getSiteSetMap() {
-		return SiteSetMap;
-	}
-
-	public ArrayList<banlistData> getIdBanReasonList() {
-		return IdBanReasonList;
-	}
-
-	public SystemConfigBean getC_bean() {
-		return C_bean;
-	}
-	
-	public Map<String, SingleLeagueData> getSingleLeagueDataMap() {
-		return SingleLeagueDataMap;
-	}
-
-	public Map<String, SingleTeamData> getSingleTeamDataMap() {
-		return SingleTeamDataMap;
-	}
-	
-	public Map<String, GameData> getGameDataMap() {
-		return GameDataMap;
-	}
-	
-	public Map<String, ArrayList<MainLineData>> getLineDataMap() {
-		return LineDataMap;
-	}
-
-	public Map<String, Long> getInplayMap() {
-		return InplayMap;
-	}
-
-	public Map<String, GameResult> getGameResultMap() {
-		return GameResultMap;
-	}
-	
-	public Set<String> getLeagueList() {
-		return leagueList;
-	}
-
-	public Map<Mapkey, Set<String>> getOC_LineContainer() {
-		return OC_LineContainer;
-	}
+//	// 載入站台設定資料
+//	public boolean LoadSiteSetList() {
+//		 int updateNum = 0;
+//		synchronized (SiteSetMap) {
+//			updateNum = model.HandleSiteSetListData(SendApiCenter.getSendApiCenter().sendSiteSetApi());
+//		}
+//		notifyObservers();
+//		return updateNum > 0;
+//	}
+//
+//	public Map<String, accountData> getAccountMap() {
+//		return accountMap;
+//	}
+//
+//	public Map<String, waterData> getWaterMap() {
+//		return waterMap;
+//	}
+//
+//	public Map<String, String> getItemMap() {
+//		return itemMap;
+//	}
+//
+//	public Set<String> getIdBanList() {
+//		return IdBanList;
+//	}
+//
+//	public Map<Integer, SiteSetData> getSiteSetMap() {
+//		return SiteSetMap;
+//	}
+//
+//	public ArrayList<banlistData> getIdBanReasonList() {
+//		return IdBanReasonList;
+//	}
+//
+//	public SystemConfigBean getC_bean() {
+//		return C_bean;
+//	}
+//
+//	public Map<String, SingleLeagueData> getSingleLeagueDataMap() {
+//		return SingleLeagueDataMap;
+//	}
+//
+//	public Map<String, SingleTeamData> getSingleTeamDataMap() {
+//		return SingleTeamDataMap;
+//	}
+//
+//	public Map<String, GameData> getGameDataMap() {
+//		return GameDataMap;
+//	}
+//
+//	public Map<String, ArrayList<MainLineData>> getLineDataMap() {
+//		return LineDataMap;
+//	}
+//
+//	public Map<String, Long> getInplayMap() {
+//		return InplayMap;
+//	}
+//
+//	public Map<String, GameResult> getGameResultMap() {
+//		return GameResultMap;
+//	}
+//
+//	public Set<String> getLeagueList() {
+//		return leagueList;
+//	}
+//
+//	public Map<Mapkey, Set<String>> getOC_LineContainer() {
+//		return OC_LineContainer;
+//	}
 
 	public static DataCenter getInstence() {
 		if (dataCenter == null) {
 			synchronized (DataCenter.class) {
 				if (dataCenter == null) {
 					dataCenter = new DataCenter();
-					dataCenter.updateSetting();
+//					dataCenter.updateSetting();
 				}
 			}
 		}
@@ -185,9 +185,9 @@ public class DataCenter extends Observable {
 		this.setChanged();
 	}
 	
-	public void updateSetting() {
-		this.C_bean = (SystemConfigBean) SerializableIO.getInstance().fileReader(BinFile.config);
-		LineHandler.getLineHandler().updateSetting();
-	}
+//	public void updateSetting() {
+//		this.C_bean = (SystemConfigBean) SerializableIO.getInstance().fileReader(BinFile.config);
+//		LineHandler.getLineHandler().updateSetting();
+//	}
 	
 }

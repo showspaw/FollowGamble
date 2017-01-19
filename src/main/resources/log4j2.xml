@@ -51,6 +51,18 @@
             <Logger name="SystemRecorder" level="ALL" additivity="false">
                 <AppenderRef ref="System" />
             </Logger>
-
+            <logger name="httpclient.wire.header">
+                <level value="debug"/>
+            </logger>
+            <logger name="httpclient.wire.content">
+                <level value="debug"/>
+            </logger>
+            <logger name="org.apache.commons.httpclient">
+                <level value="debug"/>
+            </logger>
+            <logger name="httpclient.wire">
+                <level value="debug"/>
+            </logger>
         </Loggers>
-    </Configuration>
+
+</Configuration>

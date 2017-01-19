@@ -1,10 +1,6 @@
 package com.heros.follow.source.errorlog;
 
 import com.heros.follow.utils.GenericEnum;
-import hero.follow.DataCenter.DataCenter;
-import hero.follow.DataCenter.EverEnum.LineName;
-import hero.follow.DataCenter.SendApiCenter;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
@@ -26,22 +22,22 @@ public class LogManageCenter {
 		//
 	}
 	
-	public void SendLiveStopLog(String userClass, String ballclass) {
-		if (DataCenter.getInstence().getItemMap().containsKey("RecordLiveStopLog") && DataCenter.getInstence().getItemMap().get("RecordLiveStopLog").equals("1")) 
-		{
-			liveStopLogList.get(userClass).entrySet().stream()
-						.filter(i->!i.getValue().isEmpty())
-						.forEach(i->SendApiCenter.getSendApiCenter().LiveLingLog(i.getValue(), ballclass, i.getKey(), "N", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())));
-		}
-		liveStopLogList.get(userClass).entrySet().forEach(i->i.getValue().clear());
-	}
-	
-	public void SendLineChangeLog(ArrayList<LineChangeData> loglist, String RequestTime, String HandleTime, String SendApiTime, String Updatetime) {
-		if (DataCenter.getInstence().getItemMap().containsKey("RecordLineChangeLog") && DataCenter.getInstence().getItemMap().get("RecordLineChangeLog").equals("1")) 
-		{
-			SendApiCenter.getSendApiCenter().UpdateLineLog(loglist, RequestTime, HandleTime, SendApiTime, Updatetime);
-		}
-	}
+//	public void SendLiveStopLog(String userClass, String ballclass) {
+//		if (DataCenter.getInstence().getItemMap().containsKey("RecordLiveStopLog") && DataCenter.getInstence().getItemMap().get("RecordLiveStopLog").equals("1"))
+//		{
+//			liveStopLogList.get(userClass).entrySet().stream()
+//						.filter(i->!i.getValue().isEmpty())
+//						.forEach(i->SendApiCenter.getSendApiCenter().LiveLingLog(i.getValue(), ballclass, i.getKey(), "N", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())));
+//		}
+//		liveStopLogList.get(userClass).entrySet().forEach(i->i.getValue().clear());
+//	}
+//
+//	public void SendLineChangeLog(ArrayList<LineChangeData> loglist, String RequestTime, String HandleTime, String SendApiTime, String Updatetime) {
+//		if (DataCenter.getInstence().getItemMap().containsKey("RecordLineChangeLog") && DataCenter.getInstence().getItemMap().get("RecordLineChangeLog").equals("1"))
+//		{
+//			SendApiCenter.getSendApiCenter().UpdateLineLog(loglist, RequestTime, HandleTime, SendApiTime, Updatetime);
+//		}
+//	}
 	
 	public static LogManageCenter getInstance() {
 		if (logManageCenter == null)

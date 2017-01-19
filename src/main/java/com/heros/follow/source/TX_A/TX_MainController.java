@@ -3,8 +3,10 @@ package com.heros.follow.source.TX_A;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.heros.follow.datacenter.LineHandler;
 import com.heros.follow.source.BASE.Engine;
 import com.heros.follow.source.result.GameResult;
+import com.heros.follow.source.result.LineChangeListener;
 import com.heros.follow.utils.GenericEnum;
 import com.heros.follow.utils.GenericMethod;
 import com.heros.follow.utils.HandleJSONData;
@@ -18,10 +20,27 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by root on 2017/1/16.
  */
-public class TX_MainController {
+public class TX_MainController implements LineChangeListener {
+    private double cycletime=5L;
+    private int reloginDelayTimes = 1;
     private ArrayList<String> UpdateOneList = new ArrayList<>();
+    private long lastClearDataTime = 0L;
     private static Map<String, Map<String, GameResult>> HistoryDataResult = new ConcurrentHashMap<String, Map<String, GameResult>>();
     private Map<String, TX_Engine> engines;
+    private boolean change;
+    private TXSchedulers txSchedulers;
+    private String ac="DD51759";
+    private String pw="aa88";
+    private TX_HttpModel httpModel = new TX_HttpModel();
+
+    public double getCycletime() {
+        return cycletime;
+    }
+
+    public int getReloginDelayTimes() {
+        return reloginDelayTimes;
+    }
+
     //執行狀態各球類初始化
     //XX跟盤執行中
     public void initEngine() {
@@ -31,14 +50,19 @@ public class TX_MainController {
         }
     }
 
+    public boolean login() {
+        return httpModel.login(ac,pw)==Engine.LoginStatus.SUCCESS;
+    }
     public void start() {
-        TX_HttpModel tx_httpModel = new TX_HttpModel();
-        String ac="DD51759";
-        String pw="aa88";
-        if(tx_httpModel.login(ac,pw)== Engine.LoginStatus.SUCCESS){
+        txSchedulers = new TXSchedulers(this);
+        if(login()){
             initEngine();
+            engines.forEach((k,v)->{
+                this.txSchedulers.setRunDataMap(k,v);
+            });
+            this.parseStart();
         }else{
-            log4j2.getInstance().setLog("ERROR","九州登入失敗,請檢查帳號密碼後再重新嘗試");
+            log4j2.getInstance().setLog("MsgRecorder","九州登入失敗,請檢查帳號密碼後再重新嘗試");
         }
     }
     /**
@@ -169,6 +193,8 @@ public class TX_MainController {
             }
 
             result.checkActive();
+
+            System.out.println(result.getISdbs()+","+result.getType()+","+result.getFollowID()+","+result.getStartTime());
             CurrentResult.add(result);
         }
 
@@ -176,7 +202,7 @@ public class TX_MainController {
         Set<String> Lose_Event_List = new HashSet<>();
         Set<String> filt_Lose_List = new HashSet<>();
 //        ArrayList<BanData> MustBanList = null; // 黑名單容器
-        LogManageCenter.getInstance().getSingleLineChangeList(this.getClass().getName()).clear();
+//        LogManageCenter.getInstance().getSingleLineChangeList(this.getClass().getName()).clear();
         HistoryDataResult.putIfAbsent(className, new ConcurrentHashMap<String, GameResult>());
         for (GameResult Nowrs : CurrentResult) {
 
@@ -243,14 +269,14 @@ public class TX_MainController {
 
         handleTime = System.currentTimeMillis() - handleTime;
 
-        // 發送停押打開
-        if (isChange()) {
-            LineHandler.getLineHandler().setAutoOpenLiveThread(this.getClass().getName(), GenericEnum.SiteCode.TX.getCode(), className);
-            clearLineChange();
-            LogManageCenter.getInstance().SendLiveStopLog(this.getClass().getName(), className);
-        } else {
-            LogManageCenter.getInstance().ClearCollection(this.getClass().getName());
-        }
+//        // 發送停押打開
+//        if (isChange()) {
+//            LineHandler.getLineHandler().setAutoOpenLiveThread(this.getClass().getName(), GenericEnum.SiteCode.TX.getCode(), className);
+//            clearLineChange();
+//            LogManageCenter.getInstance().SendLiveStopLog(this.getClass().getName(), className);
+//        } else {
+//            LogManageCenter.getInstance().ClearCollection(this.getClass().getName());
+//        }
 
 //        // 發送黑名單
 //        if (MustBanList != null && ! MustBanList.isEmpty()) {
@@ -259,14 +285,76 @@ public class TX_MainController {
 
         // 發出關盤
         if ( ! Lose_Event_List.isEmpty()) {
-            SendApiCenter.getSendApiCenter().sendClose(SiteCode.TX.getCode(), className, Lose_Event_List, SoundPlay.CloseHandicap);
+//            SendApiCenter.getSendApiCenter().sendClose(SiteCode.TX.getCode(), className, Lose_Event_List, SoundPlay.CloseHandicap);
             followID_Closed.addAll(Lose_Event_List);
         }
 
         // 發出變盤
         if (arrayJsonData.size() > 0) {
-            SendApiCenter.getSendApiCenter().requestAPI(SiteCode.TX.getCode(), className, arrayJsonData, SoundPlay.PATH_AUDIO1UP, this.getClass().getName(), requestTime, handleTime);
+//            SendApiCenter.getSendApiCenter().requestAPI(SiteCode.TX.getCode(), className, arrayJsonData, SoundPlay.PATH_AUDIO1UP, this.getClass().getName(), requestTime, handleTime);
+        }
+
+    }
+    private long getTimeCurrentTimeMillis(String... time) {
+        try {
+            return new SimpleDateFormat(time[0], Locale.US).parse(time[1]).getTime();
+        } catch (Exception e) {
+            return 0L;
+        }
+    }
+    // 比賽時間後8小時的賽事移除
+    public void clearDataCenter() {
+        // 1小時一次
+        if (System.currentTimeMillis() - lastClearDataTime < 3_600_000) return;
+        long historytime = 8 * 60 * 60 * 1000;
+        try {
+            Iterator<Map.Entry<String, Map<String, GameResult>>> e_itors = HistoryDataResult.entrySet().iterator();
+
+            while (e_itors.hasNext()) {
+                Map.Entry<String, Map<String, GameResult>> e_itor = e_itors.next();
+                Iterator<Map.Entry<String, GameResult>> m_itors = e_itor.getValue().entrySet().iterator();
+                while (m_itors.hasNext()) {
+                    Map.Entry<String, GameResult> m_itor = m_itors.next();
+                    if (getTimeCurrentTimeMillis("yyyy-MM-dd HH:mm:ss", m_itor.getValue().getStartTime()) < (System.currentTimeMillis() - historytime)) {
+                        m_itors.remove();
+                    }
+                }
+            }
+            lastClearDataTime = System.currentTimeMillis();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
+    @Override
+    public void setLineChange() {
+        this.change = true;
+    }
+
+    @Override
+    public void clearLineChange() {
+        this.change = false;
+    }
+
+    @Override
+    public boolean isChange() {
+        return change;
+    }
+    //啟動所有執行緒
+    public void parseStart() {
+        txSchedulers.StartThread();
+    }
+
+    //停止執行緒
+    protected void stopThread() {
+        try {
+            txSchedulers.StopThread();
+            txSchedulers.getPutDataMap().clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public TXSchedulers getTxSchedulers() {
+        return txSchedulers;
+    }
 }

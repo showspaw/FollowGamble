@@ -1,5 +1,7 @@
 package com.heros.follow.utils;
 
+import com.heros.follow.source.result.GameResult;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -7,6 +9,158 @@ import java.util.Date;
  * Created by root on 2017/1/16.
  */
 public class GenericMethod {
+    public static String transZFOption(String Value){
+        return getDSZFOption(Value);
+    }
+    public static String transDSOption(String Value){
+        return getDSZFOption(Value);
+    }
+
+    private static String getDSZFOption(String Value) {
+        String result = "";
+        switch(Value)
+        {
+            case "0":
+                result = "0";
+                break;
+            case "0/0.5":
+                result = "1";
+                break;
+            case "0.5":
+                result = "2";
+                break;
+            case "0.5/1":
+                result = "3";
+                break;
+            case "1":
+                result = "4";
+                break;
+            case "1/1.5":
+                result = "5";
+                break;
+            case "1.5":
+                result = "6";
+                break;
+            case "1.5/2":
+                result = "7";
+                break;
+            case "2":
+                result = "8";
+                break;
+            case "2/2.5":
+                result = "9";
+                break;
+            case "2.5":
+                result = "10";
+                break;
+            case "2.5/3":
+                result = "11";
+                break;
+            case "3":
+                result = "12";
+                break;
+            case "3/3.5":
+                result = "13";
+                break;
+            case "3.5":
+                result = "14";
+                break;
+            case "3.5/4":
+                result = "15";
+                break;
+            case "4":
+                result = "16";
+                break;
+            case "4/4.5":
+                result = "17";
+                break;
+            case "4.5":
+                result = "18";
+                break;
+            case "4.5/5":
+                result = "19";
+                break;
+            case "5":
+                result = "20";
+                break;
+            case "5/5.5":
+                result = "21";
+                break;
+            case "5.5":
+                result = "22";
+                break;
+            case "5.5/6":
+                result = "23";
+                break;
+            case "6":
+                result = "24";
+                break;
+            case "6/6.5":
+                result = "25";
+                break;
+            case "6.5":
+                result = "26";
+                break;
+            case "6.5/7":
+                result = "27";
+                break;
+            case "7":
+                result = "28";
+                break;
+            case "7/7.5":
+                result = "29";
+                break;
+            case "7.5":
+                result = "30";
+                break;
+            case "7.5/8":
+                result = "31";
+                break;
+            case "8":
+                result = "32";
+                break;
+            case "8/8.5":
+                result = "33";
+                break;
+            case "8.5":
+                result = "34";
+                break;
+            case "8.5/9":
+                result = "35";
+                break;
+            case "9":
+                result = "36";
+                break;
+            case "9/9.5":
+                result = "37";
+                break;
+            case "9.5":
+                result = "38";
+                break;
+            case "9.5/10":
+                result = "39";
+                break;
+            case "10":
+                result = "40";
+                break;
+        }
+        return result;
+    }
+
+    public String CompareLine(GameResult Exrs, GameResult Nowrs) {
+        if (Nowrs.getType() != Exrs.getType())
+            return "賽事類型變更";
+        else if (!Nowrs.getAwayTeam().equals(Exrs.getAwayTeam()))
+            return "客隊名稱變更";
+        else if (!Nowrs.getHomeTeam().equals(Exrs.getHomeTeam()))
+            return "主隊名稱變更";
+        else if (!Nowrs.getStartTime().equals(Exrs.getStartTime()))
+            return "比賽時間變更";
+        else if (!Nowrs.getLeagueName().equals(Exrs.getLeagueName()))
+            return "聯盟名稱變更";
+        else
+            return"不明原因";
+    }
     public static String getTransTime(int timetype, long time) {
         String TimePattern = "";
         switch(timetype) {

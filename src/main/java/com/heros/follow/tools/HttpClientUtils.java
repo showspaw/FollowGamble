@@ -28,6 +28,8 @@ import org.apache.http.impl.execchain.RequestAbortedException;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
@@ -47,7 +49,34 @@ public class HttpClientUtils {
     }
     private static final int timeOut = 30 * 1000;
     private final static Map<HttpWeb, CloseableHttpClient> httpclients = new HashMap<>();
-
+    /**
+     * Get請求
+     *
+     * @param url
+     * @return Dom
+     */
+    public static Document httpGetAsDom(HttpWeb web, String url, Header[] herds, List<Integer> outTime) {
+        String responseString = get(web, url, herds, outTime);
+        try {
+            return responseString != null ? Jsoup.parse(responseString) : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    /**
+     * Post請求
+     *
+     * @param url
+     * @return Dom
+     */
+    public static Document httpPostAsDom(HttpWeb web, String url, List<NameValuePair> params, Header[] herds, List<Integer> outTime) {
+        String responseString = post(web, url, params, herds, outTime);
+        try {
+            return responseString != null ? Jsoup.parse(responseString) : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
     public static void resetClient(HttpWeb web) throws IOException {
         if (httpclients.containsKey(web)) {
             try {
@@ -177,6 +206,14 @@ public class HttpClientUtils {
             }
         }
         return httpclients.get(web);
+    }
+    private static void setPostParams(HttpPost httpost,
+                                      List<NameValuePair> nvps) {
+        try {
+            httpost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
     private static void setPostParams(HttpPost httpost, Object params) {
         if (params instanceof Map) {

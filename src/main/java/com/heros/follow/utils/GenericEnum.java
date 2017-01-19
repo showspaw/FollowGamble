@@ -6,7 +6,7 @@ package com.heros.follow.utils;
 public class GenericEnum {
     public enum SportCode{
         bj("美棒", "MLB","bj"),
-        by( "日棒", "JPB","by"),
+        by("日棒", "JPB","by"),
         bb( "台棒", "CPBL","bb"),
         hb( "韓棒",  "KBO","hb"),
         bq( "冰球", "NHL","bq"),
@@ -18,21 +18,34 @@ public class GenericEnum {
         zs( "指數", "Stock","zs"),
         ss( "賽馬", "Horse","ss"),
         ot("其它",  "Other","ot");
-        private String name;
-        private String className;
-        private String sportPath;
+//        美棒("美棒", "MLB","bj"),
+//        日棒("日棒", "JPB","by"),
+//        台棒( "台棒", "CPBL","bb"),
+//        韓棒( "韓棒",  "KBO","hb"),
+//        冰球( "冰球", "NHL","bq"),
+//        籃球( "籃球",  "NBA","lq"),
+//        彩球("彩球",  "Lottery","cq"),
+//        美足( "美足", "MLS","mz"),
+//        網球("網球","Tennis","wq"),
+//        足球("足球",  "Soccer","zq"),
+//        指數( "指數", "Stock","zs"),
+//        賽馬( "賽馬", "Horse","ss"),
+//        其它("其它",  "Other","ot");
+        private final String name;
+        private final String className;
+        private final String sportPath;
         private final String prePath="http://ag.td111.net/manage/Page/SportsMessage/Ashx/SingleEntry_New_Ajax.ashx?v=%s&pageNum=1000&pageIndex=1&m_Ball=";
         private final String postPath = "&kf=0";
         private SportCode(String name,String className,String sportType){
             this.name = name;
             this.className = className;
             this.sportPath = prePath+sportType+postPath;
+//            this.sportPath = sportType;
         }
 
         public String getName() {
             return name;
         }
-
         public String getClassName() {
             return className;
         }
@@ -62,7 +75,7 @@ public class GenericEnum {
             return name;
         }
     }
-    public static enum ParserType {
+    public enum ParserType {
         MainListener("監視者", 2000L),
         League("聯盟接口", 21600000L),
         Team("隊伍接口", 21600000L),
@@ -98,7 +111,7 @@ public class GenericEnum {
             return this.parsername;
         }
     }
-    public static enum LineType {
+    public enum LineType {
         RunLine,
         StandardLine,
         DSB,
@@ -112,5 +125,8 @@ public class GenericEnum {
 
         private LineType() {
         }
+    }
+    public enum Logger{
+        MsgRecorder,SystemRecorder;
     }
 }

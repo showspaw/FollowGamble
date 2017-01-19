@@ -1,5 +1,6 @@
 package com.heros.follow.utils;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -20,8 +21,9 @@ public class log4j2 {
 	private String filePath = "logs";
 
 	private log4j2() {
-	    File file = new File("src/log4j2.xml");
-        context.setConfigLocation(file.toURI());
+	    File file = new File("src/main/resources/log4j2.xml");
+		context.setConfigLocation(file.toURI());
+//		context.getLogger("org.apache.http").setLevel(Level.OFF);
 	}
 	
 	public void removeLog(int beforeDay) {
