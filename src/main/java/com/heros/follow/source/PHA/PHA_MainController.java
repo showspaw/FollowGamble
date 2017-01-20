@@ -41,9 +41,10 @@ public class PHA_MainController {
     }
 
     public void start() {
-        for(BallClass ballClass:BallClass.values()){
-            init(ballClass.getGameId(),ballClass.getHeroTableName(),ballClass.getGameType());
-        }
+//        for(BallClass ballClass:BallClass.values()){
+//            init(ballClass.getGameId(),ballClass.getHeroTableName(),ballClass.getGameType());
+//        }
+        init(BallClass.美籃.getGameId(), BallClass.美籃.getHeroTableName(), BallClass.美籃.getGameType());
     }
 
     public void init(String gameId,String heroTableName,String gameType) {

@@ -208,7 +208,7 @@ public class PHA_Engine extends Engine implements LineChangeListener {
                     OBJrs.setISdbs("1");
                 }
 
-                OBJrs.setFollowIdUrl(this.Host + trRow.select("td").get(3 + this.tdcount).select("a").get(0).attr("href"));
+                OBJrs.setFollowIdUrl(httpModel.LOGINPAGE + trRow.select("td").get(3 + this.tdcount).select("a").get(0).attr("href"));
 
                 OBJrs.setSite(GenericEnum.SiteCode.PHA.getCode());
                 OBJrs.setSource(OBJrs.getSite());
@@ -426,7 +426,6 @@ public class PHA_Engine extends Engine implements LineChangeListener {
 //                    continue;
 
                 Cur_FollowID.add(Nowrs.getFollowID());
-
                 if ((Nowrs.getType() != Exrs.getType() || !Nowrs.getAwayTeam().equals(Exrs.getAwayTeam()) ||
                         !Nowrs.getHomeTeam().equals(Exrs.getHomeTeam()) || !Nowrs.getStartTime().equals(Exrs.getStartTime()) ||
                         !Nowrs.getLeagueName().equals(Exrs.getLeagueName())) )
