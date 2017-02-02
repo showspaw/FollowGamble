@@ -1,0 +1,14 @@
+Index: src/main/java/com/heros/follow/source/TestAPP.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/heros/follow/source/TestAPP.java	(date 1484812640000)
++++ src/main/java/com/heros/follow/source/TestAPP.java	(revision )
+@@ -10,5 +10,6 @@
+     public static void main(String[] args) {
+         TX_MainController tx_mainController = new TX_MainController();
+         tx_mainController.start();
++
+     }
+ }
