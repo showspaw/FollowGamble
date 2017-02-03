@@ -29,6 +29,18 @@ public class CommandController {
                 commandLoader.setCommand(new MgrCommand(request,command));
                 response=commandLoader.execute();
                 break;
+            case 拋接資料分類:
+                commandLoader.setCommand(new NoCommand(request));
+                response=commandLoader.execute();
+                break;
+            case 日誌紀錄分類:
+                commandLoader.setCommand(new NoCommand(request));
+                response=commandLoader.execute();
+                break;
+            case 查詢指令分類:
+                commandLoader.setCommand(new NoCommand(request));
+                response=commandLoader.execute();
+                break;
             case  無分類:
             default:
                 commandLoader.setCommand(new NoCommand(request));
