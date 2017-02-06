@@ -1,23 +1,42 @@
 package com.heros.follow.SocketServer.Command.collection;
 
+import com.heros.follow.SocketServer.Command.collection.mgrCmd.ThreadCmdQuery;
+import com.heros.follow.SocketServer.Command.collection.mgrCmd.ThreadCmdStart;
+
 /**
  * Created by Show on 2017/2/1.
  */
 public abstract class ACommand {
-    ACommand(String request) {
+    ACommand(String request,Name name) {
         this.request = request;
+        this.name = name;
     }
     private String request;
-
+    protected Name name;
     public String getRequest() {
         return this.request;
     }
 
     public enum ClassType {
-        無分類("9**"),拋接資料分類("2**"), 日誌紀錄分類("6**"),管理工具分類("7**"),查詢指令分類("0**");
+        查詢指令分類("0**","InstructionCommand"),
+        拋接資料分類("2**","TransceiversCommand"),
+        日誌紀錄分類("6**","LogCommand"),
+        管理工具分類("7**","MgrCommand"),
+        無分類("9**","NoCommand");
+//        InstructionCommand("0**","查詢指令分類"),
+//        TransceiversCommand("2**","拋接資料分類"),
+//        LogCommand("6**","日誌紀錄分類"),
+//        MgrCommand("7**","管理工具分類"),
+//        NoCommand("9**","無分類");
         private String code;
-        private ClassType(String code) {
+        private String commandClassName;
+        private ClassType(String code,String commandClassName) {
             this.code = code;
+            this.commandClassName = commandClassName;
+        }
+
+        public String getCommandClassName() {
+            return this.commandClassName;
         }
 
         public String getCode() {
@@ -26,18 +45,24 @@ public abstract class ACommand {
     }
     public enum GroupType{
         //無分類
-        無命令("99*"),
+        無命令("99*",""),
         //拋接資料分類
         //日誌紀錄分類
 
         //管理工具分類
-        執行緒中心("71*"),
-        資料中心("72*");
+        執行緒中心("71*","ThreadCenter"),
+        資料中心("72*","DataCenter");
         //查詢指令分類
 
         private String code;
-        private GroupType(String code) {
+        private String className;
+        private GroupType(String code,String className) {
             this.code = code;
+            this.className = className;
+        }
+
+        public String getClassName() {
+            return className;
         }
 
         public String getCode() {
@@ -47,23 +72,25 @@ public abstract class ACommand {
     }
     public enum Name{
         //無命令
-        錯誤或無命令("999",ClassType.無分類,GroupType.無命令),
+        錯誤或無命令("999",ClassType.無分類,GroupType.無命令,NoCommand.class),
         //執行緒中心
-        查詢執行緒("710", ClassType.管理工具分類, GroupType.執行緒中心),
-        啟動執行緒("711", ClassType.管理工具分類, GroupType.執行緒中心),
+        查詢執行緒("710", ClassType.管理工具分類, GroupType.執行緒中心, ThreadCmdQuery.class),
+        啟動執行緒("711", ClassType.管理工具分類, GroupType.執行緒中心, ThreadCmdStart.class),
         ;
 
         private String code;
-        private ClassType aClass;
+        private ClassType classType;
         private GroupType aGroup;
+        private Class aClass;
 
-        private Name(String code,ClassType aClass,GroupType aGroup){
+        private Name(String code, ClassType classType, GroupType aGroup,Class aClass){
             this.code = code;
-            this.aClass = aClass;
+            this.classType = classType;
             this.aGroup = aGroup;
+            this.aClass = aClass;
         }
         public ClassType getAClass() {
-            return this.aClass;
+            return this.classType;
         }
 
         public ACommand.GroupType getAGroup() {
@@ -72,6 +99,10 @@ public abstract class ACommand {
 
         public String getCode() {
             return this.code;
+        }
+
+        public Class getaClass() {
+            return aClass;
         }
     }
     public abstract String execute();
