@@ -1,6 +1,5 @@
 package com.heros.follow.SocketServer;
 
-import com.heros.follow.SocketServer.Command.collections.AdminCommand;
 
 /**
  * Created by Show on 2017/1/23.

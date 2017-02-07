@@ -29,14 +29,14 @@ public abstract class ACommand {
 //        MgrCommand("7**","管理工具分類"),
 //        NoCommand("9**","無分類");
         private String code;
-        private String commandClassName;
-        private ClassType(String code,String commandClassName) {
+        private String className;
+        private ClassType(String code,String className) {
             this.code = code;
-            this.commandClassName = commandClassName;
+            this.className = className;
         }
 
-        public String getCommandClassName() {
-            return this.commandClassName;
+        public String getClassName() {
+            return this.className;
         }
 
         public String getCode() {
