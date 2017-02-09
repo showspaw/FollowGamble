@@ -14,9 +14,26 @@ public class Robot {
         this.msg = msg;
     }
 
+    public Robot(String botToken, String chatId, String msg, String photo) {
+        this.botToken = botToken;
+        this.chatId = chatId;
+        this.msg = msg;
+        this.photo = photo;
+    }
+
     String botToken;
     String chatId;
     String msg;
+    String photo;
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public Robot setPhoto(String photo) {
+        this.photo = photo;
+        return this;
+    }
 
     public String getBotToken() {
         return botToken;

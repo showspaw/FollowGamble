@@ -118,7 +118,7 @@ public class Client {
 
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            createController(ctx.channel());
+//            createController(ctx.channel());
             System.out.println(ctx.channel().localAddress() + " active.");
 //            thread.run();
             super.channelActive(ctx);
