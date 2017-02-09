@@ -2,13 +2,10 @@ package com.heros.follow.Telegram;
 
 import com.google.gson.Gson;
 import com.heros.follow.Telegram.api.getupdates.imgur.ImgurResult;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ContentBody;
@@ -16,12 +13,8 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import sun.misc.IOUtils;
-import sun.nio.ch.IOUtil;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +26,6 @@ public class ImgurCenter {
         ArrayList<NameValuePair> postParameters;
         postParameters = new ArrayList<NameValuePair>();
         postParameters.add(new BasicNameValuePair("Authorization", "Client-ID 45c782b483a0f7b"));
-//        postParameters.add(new BasicNameValuePair("param2", "param2_value"));
         MultipartEntity mpEntity = null;
         ContentBody cbFile = null;
         try {
@@ -42,7 +34,6 @@ public class ImgurCenter {
             cbFile = new FileBody(f, "image/jpeg");
             mpEntity.addPart("image", cbFile);
             httpPost.addHeader("Authorization","Client-ID 45c782b483a0f7b");
-//            httpPost.setEntity(new UrlEncodedFormEntity(postParameters));
             httpPost.setEntity(mpEntity);
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +51,6 @@ public class ImgurCenter {
     }
 
     public static String getImageLink(String pathName) {
-
         Gson gson = new Gson();
         ImgurResult imgurResult = gson.fromJson(ImgurCenter.executePost(pathName), ImgurResult.class);
         String link = imgurResult.getData().getLink();
